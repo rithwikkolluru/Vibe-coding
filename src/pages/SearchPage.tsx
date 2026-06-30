@@ -25,7 +25,8 @@ export function SearchPage() {
           Discover <span className="text-violet-600">Top Influencers</span>
         </h2>
         <p className="text-slate-500">
-          Browse top creators across social platforms and build your campaign list.
+          Browse top creators across social platforms and build your campaign
+          list.
         </p>
       </div>
 

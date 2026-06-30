@@ -16,9 +16,12 @@ const PLATFORM_ICONS: Record<Platform, React.ReactNode> = {
 };
 
 const PLATFORM_COLORS: Record<Platform, string> = {
-  instagram: "bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-md shadow-pink-200",
-  youtube: "bg-gradient-to-r from-red-500 to-rose-600 text-white shadow-md shadow-red-200",
-  tiktok: "bg-gradient-to-r from-slate-800 to-slate-900 text-white shadow-md shadow-slate-300",
+  instagram:
+    "bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-md shadow-pink-200",
+  youtube:
+    "bg-gradient-to-r from-red-500 to-rose-600 text-white shadow-md shadow-red-200",
+  tiktok:
+    "bg-gradient-to-r from-slate-800 to-slate-900 text-white shadow-md shadow-slate-300",
 };
 
 const PLATFORM_INACTIVE: Record<Platform, string> = {

@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { X, Trash2, Users, ListX } from "lucide-react";
 import { useSelectedListStore } from "@/store/useSelectedListStore";
 import type { UserProfileSummary } from "@/types";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface SelectedListDrawerProps {
   isOpen: boolean;
@@ -14,7 +15,13 @@ function formatFollowers(count: number): string {
   return count.toString();
 }
 
-function DrawerItem({ profile, onRemove }: { profile: UserProfileSummary; onRemove: () => void }) {
+function DrawerItem({
+  profile,
+  onRemove,
+}: {
+  profile: UserProfileSummary;
+  onRemove: () => void;
+}) {
   return (
     <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100 hover:border-slate-200 transition-colors">
       {profile.picture ? (
@@ -49,97 +56,112 @@ function DrawerItem({ profile, onRemove }: { profile: UserProfileSummary; onRemo
   );
 }
 
-export function SelectedListDrawer({ isOpen, onClose }: SelectedListDrawerProps) {
-  // Subscribe to the profiles object directly — Zustand returns the same reference
-  // when the state is unchanged, so this is stable and won't loop.
+export function SelectedListDrawer({
+  isOpen,
+  onClose,
+}: SelectedListDrawerProps) {
   const profilesRecord = useSelectedListStore((state) => state.profiles);
-  const profiles = useMemo(() => Object.values(profilesRecord), [profilesRecord]);
+  const profiles = useMemo(
+    () => Object.values(profilesRecord),
+    [profilesRecord]
+  );
   const removeProfile = useSelectedListStore((state) => state.removeProfile);
   const clearList = useSelectedListStore((state) => state.clearList);
 
-  const handleClearAll = () => {
-    if (window.confirm(`Remove all ${profiles.length} influencer(s) from your list?`)) {
-      clearList();
-    }
-  };
-
   return (
-    <>
-      {/* Backdrop */}
+    <AnimatePresence>
       {isOpen && (
-        <div
-          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity"
-          onClick={onClose}
-          aria-hidden="true"
-        />
-      )}
-
-      {/* Drawer panel */}
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-label="Selected influencer list"
-        className={`fixed inset-y-0 right-0 w-full sm:w-96 bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out flex flex-col ${
-          isOpen ? "translate-x-0" : "translate-x-full"
-        }`}
-      >
-        {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
-          <div>
-            <h2 className="text-lg font-bold text-slate-800">My List</h2>
-            <p className="text-xs text-slate-400">
-              {profiles.length === 0
-                ? "No influencers added yet"
-                : `${profiles.length} influencer${profiles.length !== 1 ? "s" : ""} selected`}
-            </p>
-          </div>
-          <button
+        <div className="fixed inset-0 z-50 overflow-hidden">
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity"
             onClick={onClose}
-            className="p-2 hover:bg-slate-100 rounded-xl transition-colors"
-            aria-label="Close list"
-          >
-            <X size={20} className="text-slate-500" />
-          </button>
-        </div>
+          />
 
-        {/* Scrollable list */}
-        <div className="flex-1 overflow-y-auto px-5 py-4">
-          {profiles.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full text-center py-16">
-              <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mb-4">
-                <ListX size={28} className="text-slate-400" />
-              </div>
-              <h3 className="font-semibold text-slate-600 mb-1">Your list is empty</h3>
-              <p className="text-slate-400 text-sm">
-                Browse influencers and click "Add to List" to build your campaign.
-              </p>
-            </div>
-          ) : (
-            <div className="space-y-2">
-              {profiles.map((profile) => (
-                <DrawerItem
-                  key={profile.user_id}
-                  profile={profile}
-                  onRemove={() => removeProfile(profile.user_id)}
-                />
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Footer: clear button */}
-        {profiles.length > 0 && (
-          <div className="px-5 py-4 border-t border-slate-100 bg-slate-50">
-            <button
-              onClick={handleClearAll}
-              className="w-full flex items-center justify-center gap-2 py-2.5 border border-red-200 text-red-600 hover:bg-red-50 rounded-xl font-semibold text-sm transition-colors"
+          <div className="absolute inset-y-0 right-0 max-w-full flex">
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="w-screen max-w-md pointer-events-auto bg-white shadow-xl flex flex-col"
             >
-              <Trash2 size={15} />
-              Clear All
-            </button>
+              {/* Header */}
+              <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="p-2 bg-violet-50 rounded-lg text-violet-600">
+                    <ListX size={20} />
+                  </div>
+                  <h2 className="text-lg font-semibold text-slate-800">
+                    Selected Influencers
+                  </h2>
+                </div>
+                <button
+                  onClick={onClose}
+                  className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors"
+                  aria-label="Close panel"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              {/* List Content */}
+              <div className="flex-1 overflow-y-auto p-6">
+                {profiles.length === 0 ? (
+                  <div className="h-full flex flex-col items-center justify-center text-center text-slate-400">
+                    <Users size={48} className="mb-4 text-slate-200" />
+                    <p className="text-sm">Your selected list is empty.</p>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <AnimatePresence initial={false}>
+                      {profiles.map((profile) => (
+                        <motion.div
+                          key={profile.user_id}
+                          initial={{ opacity: 0, height: 0, x: 20 }}
+                          animate={{ opacity: 1, height: "auto", x: 0 }}
+                          exit={{ opacity: 0, height: 0, x: -20 }}
+                          transition={{ duration: 0.2 }}
+                          className="overflow-hidden"
+                        >
+                          <DrawerItem
+                            profile={profile}
+                            onRemove={() => removeProfile(profile.user_id)}
+                          />
+                        </motion.div>
+                      ))}
+                    </AnimatePresence>
+                  </div>
+                )}
+              </div>
+
+              {/* Footer */}
+              {profiles.length > 0 && (
+                <div className="p-6 border-t border-slate-100 bg-slate-50">
+                  <button
+                    onClick={() => {
+                      if (
+                        window.confirm(
+                          "Are you sure you want to clear your entire list?"
+                        )
+                      ) {
+                        clearList();
+                      }
+                    }}
+                    className="w-full py-3 px-4 bg-white border border-slate-200 text-slate-700 font-medium rounded-xl hover:bg-slate-50 hover:border-slate-300 transition-colors flex items-center justify-center gap-2"
+                  >
+                    <Trash2 size={18} />
+                    Clear List
+                  </button>
+                </div>
+              )}
+            </motion.div>
           </div>
-        )}
-      </div>
-    </>
+        </div>
+      )}
+    </AnimatePresence>
   );
 }

@@ -8,7 +8,28 @@ interface ProfileListProps {
   isFiltered: boolean;
 }
 
-export function ProfileList({ profiles, platform, isFiltered }: ProfileListProps) {
+import { motion } from "framer-motion";
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.05,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 15 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.3 } },
+};
+
+export function ProfileList({
+  profiles,
+  platform,
+  isFiltered,
+}: ProfileListProps) {
   if (profiles.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center">
@@ -28,14 +49,17 @@ export function ProfileList({ profiles, platform, isFiltered }: ProfileListProps
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+    <motion.div
+      variants={containerVariants}
+      initial="hidden"
+      animate="show"
+      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+    >
       {profiles.map((profile) => (
-        <ProfileCard
-          key={profile.user_id}
-          profile={profile}
-          platform={platform}
-        />
+        <motion.div key={profile.user_id} variants={itemVariants}>
+          <ProfileCard profile={profile} platform={platform} />
+        </motion.div>
       ))}
-    </div>
+    </motion.div>
   );
 }

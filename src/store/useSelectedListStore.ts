@@ -1,7 +1,7 @@
-import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
-import { useShallow } from 'zustand/react/shallow';
-import type { UserProfileSummary } from '@/types';
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import { useShallow } from "zustand/react/shallow";
+import type { UserProfileSummary } from "@/types";
 
 interface SelectedListState {
   profiles: Record<string, UserProfileSummary>;
@@ -40,7 +40,7 @@ export const useSelectedListStore = create<SelectedListState>()(
       clearList: () => set({ profiles: {} }),
     }),
     {
-      name: 'influencer-selected-list',
+      name: "influencer-selected-list",
       storage: createJSONStorage(() => {
         try {
           return localStorage;
@@ -66,6 +66,4 @@ export const useSelectedCount = () =>
 
 // useShallow prevents a new array reference on every render
 export const useSelectedProfilesList = () =>
-  useSelectedListStore(
-    useShallow((state) => Object.values(state.profiles))
-  );
+  useSelectedListStore(useShallow((state) => Object.values(state.profiles)));

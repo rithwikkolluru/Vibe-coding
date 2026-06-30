@@ -73,11 +73,11 @@ Here is a summary of how we completed the assignment requirements:
 
 ## Scripts
 
-| Command        | Description              |
-| -------------- | ------------------------ |
-| `npm run dev`  | Start development server |
-| `npm run build`| Production build         |
-| `npm run lint` | Run ESLint               |
+| Command         | Description              |
+| --------------- | ------------------------ |
+| `npm run dev`   | Start development server |
+| `npm run build` | Production build         |
+| `npm run lint`  | Run ESLint               |
 
 ## Submission Notes & Trade-offs
 

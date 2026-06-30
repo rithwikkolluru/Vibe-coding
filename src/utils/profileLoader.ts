@@ -10,7 +10,7 @@ export async function loadProfileByUsername(
   // import.meta.glob keys preserve the file system casing (e.g. "MrBeast6000.json")
   // We need to match it case-insensitively against the username from the URL
   const targetPathLower = `../assets/data/profiles/${username.toLowerCase()}.json`;
-  
+
   const matchingKey = Object.keys(profileModules).find(
     (key) => key.toLowerCase() === targetPathLower
   );

@@ -55,7 +55,9 @@ export function ProfileDetailPage() {
   const { username } = useParams<{ username: string }>();
   const [searchParams] = useSearchParams();
   const platform = searchParams.get("platform") || "unknown";
-  const [profileData, setProfileData] = useState<ProfileDetailResponse | null>(null);
+  const [profileData, setProfileData] = useState<ProfileDetailResponse | null>(
+    null
+  );
   const [loaded, setLoaded] = useState(false);
 
   const toggleProfile = useSelectedListStore((state) => state.toggleProfile);

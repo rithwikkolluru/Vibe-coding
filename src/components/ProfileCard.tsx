@@ -80,7 +80,9 @@ export const ProfileCard = memo(function ProfileCard({
       <div className="flex items-center gap-3 text-xs text-slate-600 bg-slate-50 rounded-xl px-3 py-2">
         <div className="flex items-center gap-1">
           <Users size={12} className="text-violet-400" />
-          <span className="font-semibold">{formatFollowersLocal(profile.followers)}</span>
+          <span className="font-semibold">
+            {formatFollowersLocal(profile.followers)}
+          </span>
           <span className="text-slate-400">followers</span>
         </div>
         {profile.engagement_rate !== undefined && (
