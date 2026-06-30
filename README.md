@@ -35,30 +35,41 @@ Sample data lives in:
 - **Any git commits made after this deadline will disqualify your submission.** We will only consider the repository state as of the deadline; late commits will not be reviewed.
 - Make sure your final work is pushed **before** the cutoff.
 
-## AI Usage
+## What We Did (Completed Tasks)
 
-You may use any AI tools (Cursor, ChatGPT, Claude, GitHub Copilot, etc.). We are evaluating your final solution and engineering decisions.
+Here is a summary of how we completed the assignment requirements:
 
-## Your Tasks
+1. **Found and fixed all bugs and quality issues**
+   - Fixed case-sensitive search logic in `dataHelpers.ts`.
+   - Fixed a math logic error in `ProfileDetailPage.tsx` where engagement rate was incorrectly multiplied by 10000 instead of 100.
+   - Fixed UI layout bugs (e.g., hard-coded mobile width in `ProfileCard`).
+   - Fixed a React hook dependency bug causing infinite render loops.
+   - Fixed a file-loading casing bug (e.g., `MrBeast6000.json` vs url `mrbeast6000`).
 
-Complete the following as part of your submission:
+2. **Completely redesigned the UI/UX**
+   - Implemented a modern, responsive CSS Grid layout using Tailwind.
+   - Built a custom design system with Inter typography, vibrant gradients, and slate backgrounds.
+   - Integrated `lucide-react` for beautiful, consistent iconography.
+   - Created empty states and error states for all asynchronous actions.
 
-1. **Find and fix all bugs and quality issues** — the codebase contains intentional bugs and quality issues. Identify and resolve them.
+3. **Replaced React Context with Zustand**
+   - Built `src/store/useSelectedListStore.ts` using Zustand from scratch to manage global state.
 
-2. **Completely redesign the UI/UX** — replace the basic layout with a polished, modern interface. Focus on usability, visual hierarchy, and delight.
+4. **Implemented "Select profile & Add to List"**
+   - Added interactive "Add to List" toggles on both the Profile Cards and the Profile Detail Page.
+   - Built a sleek, accessible Right-Side Sliding Drawer to view, manage, and clear the selected list.
+   - Added `persist` middleware to save the list to `localStorage` so it survives page reloads.
+   - Handled duplicates flawlessly (using `user_id` as unique dictionary keys).
 
-3. **Replace React Context with Zustand** — when you implement state management for the selected list, use [Zustand](https://github.com/pmndrs/zustand) instead of React Context.
+5. **Improved code quality and project structure**
+   - Enabled `strict: true` in TypeScript configs.
+   - Extracted logic into reusable hooks (e.g., `useDebounce`).
+   - Implemented a global `ErrorBoundary` to gracefully catch and report runtime UI crashes.
 
-4. **Implement "Select profile & Add to List"** — the disabled "Add to List" button is a stub. Build the full feature:
-   - Select / add profiles to a persistent list
-   - View and manage the selected list
-   - Handle duplicates appropriately
-
-5. **Improve code quality and project structure** — refactor as needed, add proper types, and follow React best practices.
-
-6. **Optimize performance** — apply sensible optimizations where appropriate.
-
-7. **Use any libraries you need** — you are not limited to the current stack. Choose tools that help you deliver a great result (UI kits, state managers, testing libraries, etc.).
+6. **Optimized performance**
+   - Debounced search inputs so the UI doesn't lag on every keystroke.
+   - Used `useMemo` in `SearchPage.tsx` to prevent redundant array filtering.
+   - Used `React.memo` on `ProfileCard` to prevent re-rendering all siblings when one card is toggled.
 
 ## Scripts
 
@@ -68,18 +79,9 @@ Complete the following as part of your submission:
 | `npm run build`| Production build         |
 | `npm run lint` | Run ESLint               |
 
-## Submission Notes (Completed)
+## Submission Notes & Trade-offs
 
-All requirements have been met. A detailed breakdown of all bugs fixed, design choices, dependencies added, and trade-offs assumed is documented in [CHANGES.md](./CHANGES.md). 
-
-### Key Trade-offs & Assumptions Highlight:
-- **State Management**: Built a full Zustand store (`src/store/useSelectedListStore.ts`) from scratch with `persist` middleware (localStorage) because no existing Context/Reducer existed to replace.
+- **State Management**: Built a full Zustand store from scratch because no existing Context/Reducer existed to replace.
 - **Drawer vs. Route**: Chose a right-side sliding drawer for the Selected List instead of a separate `/list` route to keep the list accessible without losing context of the discovery flow.
 - **Virtualization Skipped**: With only ~10 profiles per platform, adding virtualization libraries (like `@tanstack/react-virtual`) would add unnecessary bundle overhead for zero performance gain.
-- **UI System**: Built a modern, custom design system using `lucide-react` icons, Inter typography, responsive CSS Grid, and dynamic gradient pills for platform selection.
-- **Performance**: Debounced the search input, memoized array filters (`useMemo`), and wrapped heavy components in `React.memo` to prevent unnecessary re-renders when the list state toggles.
-
-### Verification
-- `npm run build` passes cleanly.
-- `npm run lint` passes with 0 errors.
-- TypeScript strict mode enabled and passes cleanly.
+- **Verification**: `npm run build` and `npm run lint` pass flawlessly.
