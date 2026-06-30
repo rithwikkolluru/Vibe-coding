@@ -68,13 +68,18 @@ Complete the following as part of your submission:
 | `npm run build`| Production build         |
 | `npm run lint` | Run ESLint               |
 
-## Submission Notes
+## Submission Notes (Completed)
 
-- Document any assumptions or trade-offs in your README
-- Ensure `npm run build` passes before submitting
-- Focus on demonstrating your judgment — not every possible feature needs to be built, but the core assignment items should be addressed thoughtfully
-- Double-check that your repo is public (or that we have access) and that the link is included in your submission
-- Please make meaningful commits throughout your work. We may review your commit history.
-- **Bonus:** Deploying the app (e.g. Vercel, Netlify, GitHub Pages) is optional but will be considered a plus — include the live URL in your submission if you do
+All requirements have been met. A detailed breakdown of all bugs fixed, design choices, dependencies added, and trade-offs assumed is documented in [CHANGES.md](./CHANGES.md). 
 
-Good luck!
+### Key Trade-offs & Assumptions Highlight:
+- **State Management**: Built a full Zustand store (`src/store/useSelectedListStore.ts`) from scratch with `persist` middleware (localStorage) because no existing Context/Reducer existed to replace.
+- **Drawer vs. Route**: Chose a right-side sliding drawer for the Selected List instead of a separate `/list` route to keep the list accessible without losing context of the discovery flow.
+- **Virtualization Skipped**: With only ~10 profiles per platform, adding virtualization libraries (like `@tanstack/react-virtual`) would add unnecessary bundle overhead for zero performance gain.
+- **UI System**: Built a modern, custom design system using `lucide-react` icons, Inter typography, responsive CSS Grid, and dynamic gradient pills for platform selection.
+- **Performance**: Debounced the search input, memoized array filters (`useMemo`), and wrapped heavy components in `React.memo` to prevent unnecessary re-renders when the list state toggles.
+
+### Verification
+- `npm run build` passes cleanly.
+- `npm run lint` passes with 0 errors.
+- TypeScript strict mode enabled and passes cleanly.
